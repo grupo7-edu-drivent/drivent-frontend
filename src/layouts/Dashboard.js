@@ -18,6 +18,7 @@ const StyledContainer = styled(Container)`
   justify-content: flex-start;
   align-items: stretch;
   flex-direction: row;
+  font-family: 'Roboto', sans-serif;
   padding: 0;
   
   & > * {
