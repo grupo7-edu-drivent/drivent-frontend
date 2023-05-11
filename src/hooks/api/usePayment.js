@@ -11,7 +11,7 @@ export default function useTicketTypes() {
     loading: tycketsTypeLoading,
     error: tycketsTypeError,
     act: getTycketsType
-  } = useAsync(() => paymentApi.getTicketTypes(token));
+  } = useAsync(() => paymentApi.getTicketTypes(token), true);
 
   return {
     tycketsType,
