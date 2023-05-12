@@ -7,16 +7,16 @@ export default function useTicketTypes() {
   const token = useToken();
   
   const {
-    data: tycketsType,
-    loading: tycketsTypeLoading,
-    error: tycketsTypeError,
-    act: getTycketsType
+    data: ticketsType,
+    loading: ticketsTypeLoading,
+    error: ticketsTypeError,
+    act: getTicketsType
   } = useAsync(() => paymentApi.getTicketTypes(token), true);
 
   return {
-    tycketsType,
-    tycketsTypeLoading,
-    tycketsTypeError,
-    getTycketsType
+    ticketsType,
+    ticketsTypeLoading,
+    ticketsTypeError,
+    getTicketsType
   };
 }
