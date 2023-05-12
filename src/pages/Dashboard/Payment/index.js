@@ -5,16 +5,19 @@ import { useState } from 'react';
 import Button from '../../../components/Form/Button';
 import useTicketTypes from '../../../hooks/api/usePayment';
 import { useEffect } from 'react';
+import RadioGroup from '../../../components/Form/RadioGroup';
 
 export default function Payment() {
   const [ticket, setTicket] = useState({});
   const [select, setSelect] = useState();
-  // const [remote, setRemote] = useState([]);
+  const [isRemote, setIsRemote] = useState([]);
   // const [inPerson, setInPerson] = useState([]);
   // const [ticketTypeData, setTicketTypeData] = useState([]);
-
+  console.log(`Evento é remoto: ${isRemote}`);
   const { ticketsType, ticketsTypeLoading } = useTicketTypes();
-  if (ticketsTypeLoading) { return <h1>Loaging</h1>; }
+  if (ticketsTypeLoading) {
+    return <h1>Loaging</h1>;
+  }
   console.log(ticketsType);
 
   const remote = [];
@@ -37,10 +40,25 @@ export default function Payment() {
   return (
     <Main>
       <h1>Ingressos e pagamento</h1>
-      <ManagementButton data={[noHotel[0].price, remote[0].price, setSelect]} />
+      {/* <ManagementButton data={[noHotel[0].price, remote[0].price, setSelect]} /> */}
+      <RadioGroup
+        selectOptions={{
+          options: [
+            { ...noHotel[0], subtitle: 'Presencial' },
+            { ...remote[0], subtitle: 'Online' },
+          ],
+          valueKey: 'isRemote',
+        }}
+        handleSelect={setIsRemote}
+      />
       <h2>Ótimo! Agora escolha sua modalidade de hospedagem</h2>
       <ButtonsContainer>
-        <PaymentButton price={withHotel[0].price - noHotel[0].price} subtitle={'Com hotel'} selected={select} onClick={() => setSelect(!select)} />
+        <PaymentButton
+          price={withHotel[0].price - noHotel[0].price}
+          subtitle={'Com hotel'}
+          selected={select}
+          onClick={() => setSelect(!select)}
+        />
         <PaymentButton price={0} subtitle={'Sem Hotel'} selected={select} onClick={() => setSelect(!select)} />
       </ButtonsContainer>
       <h3>Fechado! O total ficou em R$ {'x'}. Agora é só confirmar:</h3>
@@ -60,37 +78,35 @@ function ManagementButton({ data }) {
     <>
       <h2>Primeiro, escolha sua modalidade de ingresso</h2>
       <ButtonsContainer>
-        <PaymentButton price={data[0]} subtitle={'Presencial'} onClick={() => userChosen('Presencial')}/>
-        <PaymentButton price={data[1]} subtitle={'Online'}  onClick={() => console.log('clicado')}/>
+        <PaymentButton price={data[0]} subtitle={'Presencial'} onClick={() => userChosen('Presencial')} />
+        <PaymentButton price={data[1]} subtitle={'Online'} onClick={() => console.log('clicado')} />
       </ButtonsContainer>
     </>
   );
 }
 
 const Main = styled.div`
-  h1{
+  h1 {
     font-size: 34px;
     color: #000000;
-    
   }
-  h2{
+  h2 {
     font-size: 20px;
-    color: #8E8E8E;
+    color: #8e8e8e;
     margin-bottom: 10px;
     margin-top: 30px;
-  } 
-  h3{
+  }
+  h3 {
     font-size: 20px;
-    color: #8E8E8E;
+    color: #8e8e8e;
     margin-bottom: 10px;
     margin-top: 20px;
-  } 
+  }
 `;
 
-const ButtonsContainer = styled.div`
+export const ButtonsContainer = styled.div`
   display: flex;
   margin-top: 15px;
   width: 310px;
   justify-content: space-between;
 `;
-
