@@ -1,11 +1,13 @@
+/* eslint-disable no-console */
+import { useState } from 'react';
 import styled from 'styled-components';
 
-export default function PaymentButton({ subtitle, price, selected }) {
+export default function PaymentButton({ subtitle, price }) {
   return (
-    <StyledButton selected={selected}>
+    <StyledButton onClick={() => console.log('clicado')}>
       <h4>{subtitle}</h4>
       <p>R$ {price}</p>
-    </StyledButton>
+    </StyledButton >
   );
 }
 
@@ -18,7 +20,6 @@ const StyledButton = styled.div`
   width: 145px;
   border-radius: 20px;
   border: 1px solid #CECECE;
-  ${props => props.selected ? 'background-color:  #FFEED2;' : ''};
   :hover{
     background-color: #FFEED2;
     cursor: pointer;
@@ -33,3 +34,4 @@ const StyledButton = styled.div`
     margin-top: 7px;
   };
 `;
+
