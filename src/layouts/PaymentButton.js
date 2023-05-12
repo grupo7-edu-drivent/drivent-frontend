@@ -1,5 +1,4 @@
 /* eslint-disable no-console */
-import { useState } from 'react';
 import styled from 'styled-components';
 
 export default function PaymentButton({ subtitle, price, selected, onClick }) {
