@@ -2,9 +2,9 @@
 import { useState } from 'react';
 import styled from 'styled-components';
 
-export default function PaymentButton({ subtitle, price }) {
+export default function PaymentButton({ subtitle, price, selected, onClick }) {
   return (
-    <StyledButton onClick={() => console.log('clicado')}>
+    <StyledButton selected={selected} onClick={onClick}>
       <h4>{subtitle}</h4>
       <p>R$ {price}</p>
     </StyledButton >
@@ -20,6 +20,7 @@ const StyledButton = styled.div`
   width: 145px;
   border-radius: 20px;
   border: 1px solid #CECECE;
+  background-color: ${props => props.selected ? '#FFEED2' : 'transparent'};
   :hover{
     background-color: #FFEED2;
     cursor: pointer;
