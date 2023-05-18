@@ -17,6 +17,7 @@ export default function RadioGroup({ selectOptions, handleSelect }) {
       {options.map((option, idx) =>
         option[valueKey] === select ? (
           <PaymentButton
+            key={idx}
             price={option.price}
             subtitle={option.subtitle || `Opção ${idx}`}
             selected={true}
@@ -24,6 +25,7 @@ export default function RadioGroup({ selectOptions, handleSelect }) {
           />
         ) : (
           <PaymentButton
+            key={idx}
             price={option.price}
             subtitle={option.subtitle || `Opção ${idx}`}
             selected={false}
