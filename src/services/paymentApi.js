@@ -6,6 +6,20 @@ export async function getTicketTypes(token) {
       Authorization: `Bearer ${token}`,
     },
   });
-  
+
   return response.data;
+}
+
+export async function reserveTicket(token, ticketTypeId) {
+  const response = await api.post(
+    '/tickets',
+    { ticketTypeId },
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
+
+  return response;
 }

@@ -3,10 +3,14 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import Button from '../../../components/Form/Button';
 import RadioGroup from '../../../components/Form/RadioGroup';
-import useTicketTypes from '../../../hooks/api/usePayment';
+import { useTicketTypes } from '../../../hooks/api/usePayment';
 import CreditCard from './CreditCard';
+import useToken from '../../../hooks/useToken';
+import { reserveTicket } from '../../../services/paymentApi';
+import { toast } from 'react-toastify';
 
 export default function Payment() {
+  const token = useToken();
   const [ticket, setTicket] = useState({});
   const [isRemote, setIsRemote] = useState(null);
   const [haveHotel, setHaveHotel] = useState(null);
@@ -17,7 +21,31 @@ export default function Payment() {
   if (ticketsTypeLoading) {
     return <h1>Loaging</h1>;
   }
-  console.log(ticketsType);
+  async function handleReserveHotel() {
+    let ticketType;
+
+    if (isRemote === true) {
+      ticketType = remote[0];
+      setPaymentType('Online');
+    }
+    if (!isRemote && !haveHotel) {
+      ticketType = noHotel[0];
+      setPaymentType('Presencial + Sem Hotel');
+    }
+    if (!isRemote && haveHotel) {
+      ticketType = withHotel[0];
+      setPaymentType('Presencial + Com Hotel');
+    }
+
+    try {
+      const response = await reserveTicket(token, ticketType.id);
+      const reservedTicket = response.data;
+      setTicket(reservedTicket);
+      setShowCreditCard(true);
+    } catch (error) {
+      toast('Não foi possível reservar o hotel');
+    }
+  }
 
   const remote = [];
   const inPerson = [];
@@ -40,20 +68,20 @@ export default function Payment() {
   // console.log(noHotel);
   // console.log(withHotel);
 
-  function featTicket(isRemote, haveHotel) {
-    if (isRemote === true) {
-      setTicket(remote[0]);
-      setPaymentType('Online');
-    }
-    if (!isRemote && !haveHotel) {
-      setTicket(noHotel[0]);
-      setPaymentType('Presencial + Sem Hotel');
-    }
-    if (!isRemote && haveHotel) {
-      setTicket(withHotel[0]);
-      setPaymentType('Presencial + Com Hotel');
-    }
-  }
+  // function featTicket(isRemote, haveHotel) {
+  //   if (isRemote === true) {
+  //     setTicketType(remote[0]);
+  //     setPaymentType('Online');
+  //   }
+  //   if (!isRemote && !haveHotel) {
+  //     setTicketType(noHotel[0]);
+  //     setPaymentType('Presencial + Sem Hotel');
+  //   }
+  //   if (!isRemote && haveHotel) {
+  //     setTicketType(withHotel[0]);
+  //     setPaymentType('Presencial + Com Hotel');
+  //   }
+  // }
 
   return (
     <>
@@ -75,12 +103,7 @@ export default function Payment() {
           {isRemote ? (
             <>
               <h3>Fechado! O total ficou em R$ {remote[0].price}. Agora é só confirmar:</h3>
-              <Button
-                onClick={() => {
-                  featTicket(isRemote, haveHotel);
-                  setShowCreditCard(true);
-                }}
-              >
+              <Button onClick={handleReserveHotel}>
                 <p>RESERVAR INGRESSO</p>
               </Button>
             </>
@@ -104,12 +127,7 @@ export default function Payment() {
               <h3>
                 Fechado! O total ficou em R$ {haveHotel ? withHotel[0].price : noHotel[0].price}. Agora é só confirmar:
               </h3>
-              <Button
-                onClick={() => {
-                  featTicket(isRemote, haveHotel);
-                  setShowCreditCard(true);
-                }}
-              >
+              <Button onClick={handleReserveHotel}>
                 <p>RESERVAR INGRESSO</p>
               </Button>
             </>

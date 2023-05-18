@@ -100,7 +100,7 @@ export default function CreditCard(props) {
         <h2>Ingresso escolhido</h2>
         <StyledButton>
           <h4>{paymentType}</h4>
-          <p>R$ {props.ticket.price}</p>
+          <p>R$ {props.ticket.TicketType.price}</p>
         </StyledButton>
         <h2>Pagamento</h2>
       </Main>
