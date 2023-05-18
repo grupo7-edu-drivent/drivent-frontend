@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import Button from '../../../components/Form/Button';
 import RadioGroup from '../../../components/Form/RadioGroup';
-import useTicketTypes from '../../../hooks/api/usePayment';
+import { useTicketTypes } from '../../../hooks/api/usePayment';
 import CreditCard from './CreditCard';
 
 export default function Payment() {
