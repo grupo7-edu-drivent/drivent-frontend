@@ -1,10 +1,9 @@
 import { IoPersonOutline, IoPerson } from 'react-icons/io5';
 import styled from 'styled-components';
-import { useBookingByRoom } from '../../hooks/api/useBooking';
 import { useEffect, useState } from 'react';
+import { useBookingByRoom } from '../../hooks/api/useBooking';
 
 export default function CardRoom({ item, select, setSelectRoom }) {
-  console.log(item);
   const { name, capacity } = item;
   const { bookingsByRoomId } = useBookingByRoom(item.id);
   const [listRoom, setListRoom] = useState([]);
@@ -29,7 +28,7 @@ export default function CardRoom({ item, select, setSelectRoom }) {
       <NameRoom>{name}</NameRoom>
       <ContainerPersons>
         {listRoom.length > 0 && listRoom.map((item, i) => 
-          (<IconPerson key={i}>
+          (<IconPerson key={i} >
             <IoPersonOutline/>
           </IconPerson >
           )

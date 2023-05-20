@@ -7,6 +7,7 @@ import SelectHotelAndRooms from '../../../components/SelectHotelAndRoom';
 import Loader from 'react-loader-spinner';
 import Booking from '../../../components/Booking';
 import { listBooking } from '../../../services/bookingApi';
+import { getRooms } from '../../../services/hotelApi';
 
 export default function Hotel() {
   const token = useToken();
@@ -17,13 +18,15 @@ export default function Hotel() {
   useEffect(async() => {
     try {
       const response = await listBooking(token);
+      const roomsData = await getRooms(token, response.Room.Hotel.id);
       setBooking(response);
+      setRooms(roomsData);
       setLoading(false);
     } catch (error) {
       toast('Faça sua reserva! 🤗');
       setLoading(false);
     }
-  }, []);
+  }, [loading]);
 
   if(loading) {
     return (
@@ -35,11 +38,11 @@ export default function Hotel() {
    
   if(booking) {
     return (
-      <Booking booking={booking} />
+      <Booking loading={loading} setLoading={setLoading} token={token} booking={booking} rooms={rooms}/>
     );
   };
 
-  return <SelectHotelAndRooms token={token} setBooking={setBooking} rooms={rooms} setRooms={setRooms} />;
+  return <SelectHotelAndRooms token={token} setBooking={setBooking} rooms={rooms} setRooms={setRooms} loading={loading} setLoading={setLoading}  />;
 }
 
 const Loading = styled.div`
