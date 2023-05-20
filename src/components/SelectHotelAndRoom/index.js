@@ -7,7 +7,7 @@ import CardRoom from '../CardRoom';
 import { createBooking, listBooking } from '../../services/bookingApi';
 import { toast } from 'react-toastify';
 
-export default function SelectHotelAndRooms({ token, setBooking, rooms, setRooms }) {
+export default function SelectHotelAndRooms({ token, setBooking, rooms, setRooms, loading, setLoading }) {
   const { paymentEvent, hasHotelEvent } = useContext(EventInfoContext);
   const [selectHotel, setSelectHotel] = useState(null);
   const [selectRoom, setSelectRoom] = useState(null);
@@ -18,6 +18,7 @@ export default function SelectHotelAndRooms({ token, setBooking, rooms, setRooms
       await createBooking(token, selectRoom);
       const response = await listBooking(token);
       setBooking(response);
+      setLoading(!loading);
       toast('Reserva realizada com sucesso!!');
     } catch (error) {
       toast.error('Erro ao reservar sua hospedagem!', {
