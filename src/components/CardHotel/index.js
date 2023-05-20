@@ -17,7 +17,6 @@ export default function CardHotel({ setRooms, item, select, setSelectHotel }) {
       setTypeRoomList(typesRooms);
       let countCapacity = 0;
       rooms.forEach((item) => {
-        console.log(item.capacity);
         return countCapacity += item.capacity;
       });
 

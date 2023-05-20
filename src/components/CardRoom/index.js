@@ -1,16 +1,16 @@
 import { IoPersonOutline, IoPerson } from 'react-icons/io5';
 import styled from 'styled-components';
-import useBookingRoom from '../../hooks/api/useBookingRoom';
+import { useBookingByRoom } from '../../hooks/api/useBooking';
 import { useEffect, useState } from 'react';
 
 export default function CardRoom({ item, select, setSelectRoom }) {
+  console.log(item);
   const { name, capacity } = item;
-  const { bookingsByRoomId } = useBookingRoom(item.id);
+  const { bookingsByRoomId } = useBookingByRoom(item.id);
   const [listRoom, setListRoom] = useState([]);
-
-  console.log(listRoom);
  
   useEffect(() => {
+    setSelectRoom(null);
     if(bookingsByRoomId) {
       let list = [];
       for(let i = 0; i < capacity - bookingsByRoomId.length; i++) {
@@ -28,14 +28,14 @@ export default function CardRoom({ item, select, setSelectRoom }) {
     <ContainerCardRoom disabled={listRoom.length === 0} select={select} id={item.id} listRoom={listRoom} onClick={handleCardRoom}>
       <NameRoom>{name}</NameRoom>
       <ContainerPersons>
-        {listRoom.length > 0 && listRoom.map((item) => 
-          (<IconPerson >
+        {listRoom.length > 0 && listRoom.map((item, i) => 
+          (<IconPerson key={i}>
             <IoPersonOutline/>
           </IconPerson >
           )
         )}
         {
-          bookingsByRoomId && bookingsByRoomId.map((item) => <IconPerson list={listRoom.length === 0 && '#8C8C8C'}><IoPerson/></IconPerson>)
+          bookingsByRoomId && bookingsByRoomId.map((item, i) => <IconPerson key={i} list={listRoom.length === 0 && '#8C8C8C'}><IoPerson/></IconPerson>)
         }
       </ContainerPersons>
     </ContainerCardRoom>

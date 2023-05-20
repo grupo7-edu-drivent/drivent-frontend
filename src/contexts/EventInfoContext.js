@@ -9,8 +9,8 @@ export default EventInfoContext;
 
 export function EventInfoProvider({ children }) {
   const { event, eventLoading, eventError } = useEvent();
-  const [paymentEvent, setPaymentEvent] = useState(false);
-  const [hasHotelEvent, setHasHotelEvent] = useState(false);
+  const [paymentEvent, setPaymentEvent] = useState(true);
+  const [hasHotelEvent, setHasHotelEvent] = useState(true);
 
   if (eventLoading) {
     return <Splash loading />;
