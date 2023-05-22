@@ -37,15 +37,28 @@ export default function Hotel() {
       </Loading>
     );
   }
-   
-  if(booking) {
-    return (
-      <Booking loading={loading} setLoading={setLoading} token={token} booking={booking} rooms={rooms}/>
-    );
-  };
 
-  return <SelectHotelAndRooms token={token} setBooking={setBooking} rooms={rooms} setRooms={setRooms} loading={loading} setLoading={setLoading}  />;
+  return (
+    <MainContainer>
+      <TitlePage>Escolha de Hotel e quarto</TitlePage>
+      {booking ? (<Booking token={token} rooms={rooms} setRooms={setRooms} loading={loading} setLoading={setLoading} booking={booking}/>) 
+        : (<SelectHotelAndRooms token={token} loading={loading} setLoading={setLoading} booking={booking} />)
+      }
+    </MainContainer>
+  );
 }
+
+const MainContainer = styled.div`
+  width: 100%;
+  height: 100%;
+  padding-top: 50px;
+`;
+
+const TitlePage = styled.h1`
+  font-family: 'Roboto';
+  font-weight: 400;
+  font-size: 34px;
+`;
 
 const Loading = styled.div`
   width: 100%;

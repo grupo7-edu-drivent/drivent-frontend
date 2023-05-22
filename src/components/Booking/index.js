@@ -4,8 +4,9 @@ import { useState } from 'react';
 import CardRoom from '../CardRoom';
 import { toast } from 'react-toastify';
 import { alterRoomBooking } from '../../services/bookingApi';
+import SelectHotelAndRooms from '../SelectHotelAndRoom';
 
-export default function Booking({ token, booking, rooms, loading, setLoading }) {
+export default function Booking({ token, rooms, setRooms, loading, setLoading, booking }) {
   const [ alterRoom, setAlterRoom ] = useState(false);
   const [ selectRoom, setSelectRoom ] = useState(null);
 
@@ -14,59 +15,18 @@ export default function Booking({ token, booking, rooms, loading, setLoading }) 
     setAlterRoom(false);
   }
 
-  async function handleAlterRoom() {
-    try {
-      await alterRoomBooking(token, booking.id, selectRoom);
-      setLoading(!loading);
-      toast('Quarto alterado com sucesso!');
-    } catch (error) {
-      cancel();
-      toast.error('Erro ao tentar alterar sua hospedagem', {
-        position: 'top-right',
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: 'light',
-      });
-    }
-  }
-
   return (
-    <MainContainer>
-      <TitlePage>Escolha de Hotel e quarto</TitlePage>
+    <>
       <ContainerOptions>
         <InfoOptionBooking>Você já escolheu seu quarto:</InfoOptionBooking>
-        <CardBooking booking={booking}/>
-        {!alterRoom ? 
-          (<ButtonAlterRoom onClick={() => setAlterRoom(true)}>TROCAR DE QUARTO</ButtonAlterRoom>) : 
-          (<ContainerRooms>
-            <InfoFirstRoom>Ótima pedida! Agora escolha seu quarto:</InfoFirstRoom>
-            <ContainerListRooms>
-              {rooms.Rooms.map((item) => <CardRoom key={item.id} item={item} select={selectRoom} setSelectRoom={setSelectRoom}/>)}
-            </ContainerListRooms>
-            <Button onClick={handleAlterRoom}>ALTERAR QUARTO</Button>
-            <Button onClick={cancel}>CANCELAR</Button>
-          </ContainerRooms>)
+        <CardBooking booking={booking}/> 
+        {!alterRoom ? (<ButtonAlterRoom onClick={() => setAlterRoom(true)}>TROCAR DE QUARTO</ButtonAlterRoom>) :
+          <SelectHotelAndRooms token={token} rooms={rooms} setRooms={setRooms} loading={loading} setLoading={setLoading} booking={booking} setAlterRoom={setAlterRoom} />
         }
       </ContainerOptions>
-    </MainContainer>
+    </>
   );
 }
-
-const MainContainer = styled.div`
-  width: 100%;
-  height: 100%;
-  padding-top: 50px;
-`;
-
-const TitlePage = styled.h1`
-  font-family: 'Roboto';
-  font-weight: 400;
-  font-size: 34px;
-`;
 
 const ContainerOptions = styled.div`
   width: 100%;

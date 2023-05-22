@@ -12,7 +12,6 @@ import UserContext from '../../../contexts/UserContext';
 import { getTicketByUser } from '../../../services/ticketApi';
 
 export default function Payment() {
-  const { loadUseEffect, setLoadUseEffect } = useContext(UserContext);
   const token = useToken();
   const [ticket, setTicket] = useState(null);
   const [isRemote, setIsRemote] = useState(null);
@@ -40,7 +39,6 @@ export default function Payment() {
           setShowCreditCard(true);
         }
         if (!ticketData.TicketType.isRemote && ticketData.TicketType.includesHotel) {
-          console.log('entrou!');
           setTicket(ticketData);
           setPaymentType('Presencial + Com Hotel');
           setShowCreditCard(true);
@@ -52,7 +50,7 @@ export default function Payment() {
   }, [ticket]);
 
   if (ticketsTypeLoading) {
-    return <h1>Loaging</h1>;
+    return <h1>Loading</h1>;
   }
   async function handleReserveHotel() {
     let ticketType;

@@ -1,5 +1,4 @@
 import { createContext, useEffect, useState } from 'react';
-
 import useLocalStorage from '../hooks/useLocalStorage';
 import { getTicketPaidByUser } from '../services/ticketApi';
 

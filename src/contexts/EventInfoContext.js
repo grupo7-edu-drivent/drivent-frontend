@@ -1,10 +1,6 @@
-import { createContext, useEffect, useState } from 'react';
-
+import { createContext } from 'react';
 import Splash from '../components/Splash';
-
 import useEvent from '../hooks/api/useEvent';
-import { getTicketPaidByUser } from '../services/ticketApi';
-import useToken from '../hooks/useToken';
 
 const EventInfoContext = createContext();
 export default EventInfoContext;
