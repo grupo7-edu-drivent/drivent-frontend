@@ -5,9 +5,15 @@ import useAsync from '../useAsync';
 export default function useHotel() {
   const token = useToken();
 
-  const { data } = useAsync(() => hotelApi.getHotels(token));
+  const { data: dataGetHotels,
+    loading: loadingGetHotels,
+    error: errorGetHotels,
+    act: actGetHotels } = useAsync(() => hotelApi.getHotels(token));
 
   return {
-    data,
+    dataGetHotels,
+    loadingGetHotels,
+    errorGetHotels,
+    actGetHotels
   };
 }
