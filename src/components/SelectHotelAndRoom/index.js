@@ -1,17 +1,29 @@
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
-import EventInfoContext from '../../contexts/EventInfoContext';
-import useHotel from '../../hooks/api/useHotel';
 import CardHotel from '../CardHotel';
 import CardRoom from '../CardRoom';
 import { createBooking, listBooking } from '../../services/bookingApi';
 import { toast } from 'react-toastify';
+import UserContext from '../../contexts/UserContext';
+import { getHotels } from '../../services/hotelApi';
 
 export default function SelectHotelAndRooms({ token, setBooking, rooms, setRooms, loading, setLoading }) {
-  const { paymentEvent, hasHotelEvent } = useContext(EventInfoContext);
+  const { paymentEvent, hasHotelEvent } = useContext(UserContext);
   const [selectHotel, setSelectHotel] = useState(null);
   const [selectRoom, setSelectRoom] = useState(null);
-  const { data } = useHotel();
+  const [ hotels, setHotels ] = useState(null);
+  console.log(paymentEvent);
+  console.log(hasHotelEvent);
+
+  useEffect(async() => {
+    try {
+      const hotelResponse = await getHotels(token);
+      console.log(hotelResponse);
+      setHotels(hotelResponse);
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
 
   async function handleSubmitReserve() {
     try {
@@ -52,7 +64,7 @@ export default function SelectHotelAndRooms({ token, setBooking, rooms, setRooms
           <ContainerHotels>
             <InfoFirstHotel>Primeiro, escolha seu hotel</InfoFirstHotel>
             <ContainerListHotels>
-              {data && data.map((item) => <CardHotel setRooms={setRooms} key={item.id} select={selectHotel} setSelectHotel={setSelectHotel} item={item} />)}
+              {hotels && hotels.map((item) => <CardHotel setRooms={setRooms} key={item.id} select={selectHotel} setSelectHotel={setSelectHotel} item={item} />)}
             </ContainerListHotels>
           </ContainerHotels>
           {rooms && (

@@ -1,16 +1,16 @@
-import { createContext, useState } from 'react';
+import { createContext, useEffect, useState } from 'react';
 
 import Splash from '../components/Splash';
 
 import useEvent from '../hooks/api/useEvent';
+import { getTicketPaidByUser } from '../services/ticketApi';
+import useToken from '../hooks/useToken';
 
 const EventInfoContext = createContext();
 export default EventInfoContext;
 
 export function EventInfoProvider({ children }) {
   const { event, eventLoading, eventError } = useEvent();
-  const [paymentEvent, setPaymentEvent] = useState(true);
-  const [hasHotelEvent, setHasHotelEvent] = useState(true);
 
   if (eventLoading) {
     return <Splash loading />;
@@ -28,10 +28,6 @@ export function EventInfoProvider({ children }) {
       value={{
         eventInfo: event,
         eventInfoError: eventError,
-        paymentEvent,
-        setPaymentEvent,
-        hasHotelEvent,
-        setHasHotelEvent,
       }}
     >
       {children}

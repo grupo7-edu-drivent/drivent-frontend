@@ -1,7 +1,6 @@
 import { useEffect } from 'react';
 import styled from 'styled-components';
 import { useState } from 'react';
-import { toast } from 'react-toastify';
 import useToken from '../../../hooks/useToken';
 import SelectHotelAndRooms from '../../../components/SelectHotelAndRoom';
 import Loader from 'react-loader-spinner';
@@ -16,6 +15,10 @@ export default function Hotel() {
   const [rooms, setRooms] = useState(null);
 
   useEffect(async() => {
+    getListBooking();
+  }, [loading]);
+
+  async function getListBooking() {
     try {
       const response = await listBooking(token);
       const roomsData = await getRooms(token, response.Room.Hotel.id);
@@ -23,10 +26,9 @@ export default function Hotel() {
       setRooms(roomsData);
       setLoading(false);
     } catch (error) {
-      toast('Faça sua reserva! 🤗');
       setLoading(false);
     }
-  }, [loading]);
+  }
 
   if(loading) {
     return (

@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import Button from '../../../components/Form/Button';
 import RadioGroup from '../../../components/Form/RadioGroup';
@@ -8,16 +8,49 @@ import CreditCard from './CreditCard';
 import useToken from '../../../hooks/useToken';
 import { reserveTicket } from '../../../services/paymentApi';
 import { toast } from 'react-toastify';
+import UserContext from '../../../contexts/UserContext';
+import { getTicketByUser } from '../../../services/ticketApi';
 
 export default function Payment() {
+  const { loadUseEffect, setLoadUseEffect } = useContext(UserContext);
   const token = useToken();
-  const [ticket, setTicket] = useState({});
+  const [ticket, setTicket] = useState(null);
   const [isRemote, setIsRemote] = useState(null);
   const [haveHotel, setHaveHotel] = useState(null);
   const [showCreditCard, setShowCreditCard] = useState(false);
   const [paymentType, setPaymentType] = useState(null);
-
   const { ticketsType, ticketsTypeLoading } = useTicketTypes();
+
+  useEffect(async() => {
+    if(!ticket) {
+      let ticketData;
+      try {
+        ticketData = await getTicketByUser(token);
+
+        console.log(ticketData);
+    
+        if (ticketData.TicketType.isRemote === true) {
+          setPaymentType('Online');
+          setTicket(ticketData);
+          setShowCreditCard(true);
+        }
+        if (!ticketData.TicketType.isRemote && !ticketData.TicketType.includesHotel) {
+          setPaymentType('Presencial + Sem Hotel');
+          setTicket(ticketData);
+          setShowCreditCard(true);
+        }
+        if (!ticketData.TicketType.isRemote && ticketData.TicketType.includesHotel) {
+          console.log('entrou!');
+          setTicket(ticketData);
+          setPaymentType('Presencial + Com Hotel');
+          setShowCreditCard(true);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  }, [ticket]);
+
   if (ticketsTypeLoading) {
     return <h1>Loaging</h1>;
   }
@@ -40,6 +73,7 @@ export default function Payment() {
     try {
       const response = await reserveTicket(token, ticketType.id);
       const reservedTicket = response.data;
+      console.log(reservedTicket);
       setTicket(reservedTicket);
       setShowCreditCard(true);
     } catch (error) {
