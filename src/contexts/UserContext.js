@@ -18,13 +18,10 @@ export function UserProvider({ children }) {
   async function verifyPayment() {
     try {
       const ticket = await getTicketPaidByUser(userData.token);
-      console.log(ticket);
       if(ticket.status === 'PAID') {
-        console.log('entrou!');
         setPaymentEvent(true);
       }
       if(ticket.TicketType.isRemote === false && ticket.TicketType.includesHotel === true) {
-        console.log('entrou hotel');
         setHasHotelEvent(true);
       }
     } catch (error) {
