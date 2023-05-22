@@ -1,18 +1,23 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Cards from 'react-credit-cards-2';
 import 'react-credit-cards-2/dist/es/styles-compiled.css';
 import { HiCheckCircle } from 'react-icons/hi';
 import styled from 'styled-components';
 import Button from '../../../components/Form/Button';
+import { toast } from 'react-toastify';
+import { getPaymentByTicketId, paymentProcess } from '../../../services/paymentApi';
+import UserContext from '../../../contexts/UserContext';
 
 export default function CreditCard(props) {
-  const { paymentType } = props;
+  const { paymentType, token } = props;
+  const { id: ticketId } = props.ticket;
   const [state, setState] = useState({
     number: '',
     expiry: '',
     cvc: '',
     name: '',
     focus: '',
+    issuer: 'Master Card',
     success: false,
   });
 
@@ -24,7 +29,18 @@ export default function CreditCard(props) {
   });
 
   const [showSuccessPayment, setShowSuccessPayment] = useState(false);
+  const { setLoadUseEffect } = useContext(UserContext); 
 
+  useEffect(async() => {
+    try {
+      await getPaymentByTicketId(token, ticketId);
+      setLoadUseEffect(true);
+      setShowSuccessPayment(true);
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
+ 
   const validateInput = (name, value) => {
     let valid = false;
     if (name === 'number') {
@@ -87,8 +103,25 @@ export default function CreditCard(props) {
     setState((prev) => ({ ...prev, focus: evt.target.name }));
   };
 
-  const handlePaymentButtonClick = () => {
-    setShowSuccessPayment(true);
+  const handlePaymentButtonClick = async(e) => {
+    e.preventDefault();
+    try {
+      const response = await paymentProcess(token, ticketId, state);
+      console.log(response);
+      setLoadUseEffect(true);
+      setShowSuccessPayment(true);
+    } catch (error) {
+      toast.error('Erro ao realizar ao pagamento, tente novamente mais tarde!', {
+        position: 'top-right',
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'light',
+      });
+    }
   };
 
   useEffect(() => {}, [paymentType]);
