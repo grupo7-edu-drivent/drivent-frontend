@@ -1,19 +1,11 @@
 import styled from 'styled-components';
 import CardBooking from '../CardBooking';
 import { useState } from 'react';
-import CardRoom from '../CardRoom';
-import { toast } from 'react-toastify';
-import { alterRoomBooking } from '../../services/bookingApi';
 import SelectHotelAndRooms from '../SelectHotelAndRoom';
 
 export default function Booking({ token, rooms, setRooms, loading, setLoading, booking }) {
   const [ alterRoom, setAlterRoom ] = useState(false);
   const [ selectRoom, setSelectRoom ] = useState(null);
-
-  function cancel() {
-    setSelectRoom(null);
-    setAlterRoom(false);
-  }
 
   return (
     <>

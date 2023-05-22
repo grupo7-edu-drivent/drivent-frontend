@@ -25,8 +25,6 @@ export default function Payment() {
       let ticketData;
       try {
         ticketData = await getTicketByUser(token);
-
-        console.log(ticketData);
     
         if (ticketData.TicketType.isRemote === true) {
           setPaymentType('Online');
@@ -71,7 +69,6 @@ export default function Payment() {
     try {
       const response = await reserveTicket(token, ticketType.id);
       const reservedTicket = response.data;
-      console.log(reservedTicket);
       setTicket(reservedTicket);
       setShowCreditCard(true);
     } catch (error) {

@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from 'react';
 import styled from 'styled-components';
 import CardHotel from '../CardHotel';
 import CardRoom from '../CardRoom';
-import { alterRoomBooking, createBooking, listBooking } from '../../services/bookingApi';
+import { alterRoomBooking, createBooking } from '../../services/bookingApi';
 import { toast } from 'react-toastify';
 import UserContext from '../../contexts/UserContext';
 import { getHotels } from '../../services/hotelApi';
@@ -19,7 +19,7 @@ export default function SelectHotelAndRooms({ token, loading, setLoading, bookin
       const hotelResponse = await getHotels(token);
       setHotels(hotelResponse);
     } catch (error) {
-      console.log('Não tem quartos!');
+      console.log(error);
     }
   }, []);
 
