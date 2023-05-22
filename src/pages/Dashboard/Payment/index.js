@@ -8,7 +8,6 @@ import CreditCard from './CreditCard';
 import useToken from '../../../hooks/useToken';
 import { reserveTicket } from '../../../services/paymentApi';
 import { toast } from 'react-toastify';
-import UserContext from '../../../contexts/UserContext';
 import { getTicketByUser } from '../../../services/ticketApi';
 
 export default function Payment() {
@@ -115,7 +114,7 @@ export default function Payment() {
   return (
     <>
       {showCreditCard ? (
-        <CreditCard paymentType={paymentType} ticket={ticket} />
+        <CreditCard paymentType={paymentType} ticket={ticket} token={token}/>
       ) : (
         <Main>
           <h1>Ingressos e pagamento</h1>

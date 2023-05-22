@@ -5,7 +5,6 @@ import SelectHotelAndRooms from '../SelectHotelAndRoom';
 
 export default function Booking({ token, rooms, setRooms, loading, setLoading, booking }) {
   const [ alterRoom, setAlterRoom ] = useState(false);
-  const [ selectRoom, setSelectRoom ] = useState(null);
 
   return (
     <>
