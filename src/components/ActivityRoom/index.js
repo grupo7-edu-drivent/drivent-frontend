@@ -1,48 +1,58 @@
+import React from 'react';
 import styled from 'styled-components';
 import ActivityCard from './../ActivityCard';
 
-export default function ActivityRooms() {
+export default function ActivityRooms({ activities }) {
+  const uniqueRoomTitles = ['Auditório Principal', 'Auditório Lateral', 'Sala de Workshop'];
+
+  const renderRoomTitles = () => {
+    return uniqueRoomTitles.map((roomTitle, index) => <RoomTitle key={index}>{roomTitle}</RoomTitle>);
+  };
+
   return (
-    <>
-      <MainContainer>
-        <h2>Auditório Principal</h2>
-        <h2>Auditório Lateral</h2>
-        <h2>Auditório Lateral</h2>
-      </MainContainer>
-      <Table>
-        <tbody>
-          <tr>
-            <Column><ActivityCard/></Column>
-            <Column></Column>
-            <Column></Column>
-          </tr>
-        </tbody>
-      </Table>
-    </>
+    <Table>
+      <thead>
+        <tr>{renderRoomTitles()}</tr>
+      </thead>
+      <tbody>
+        <tr>
+          {uniqueRoomTitles.map((roomTitle, index) => (
+            <Column key={index}>
+              {activities.map((activity) => {
+                if (activity.roomTitle === roomTitle) {
+                  return <ActivityCard key={activity.id} activity={activity} />;
+                }
+                return null;
+              })}
+            </Column>
+          ))}
+        </tr>
+      </tbody>
+    </Table>
   );
 }
 
-const MainContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  margin-top: 61px;
-  justify-content: space-around;
-  font-family: 'Roboto';
-  font-style: normal;
-  font-weight: 400;
-  font-size: 17px;
-  color: #7b7b7b;
-`;
-
 const Table = styled.table`
   width: 100%;
+  height: 25rem;
   table-layout: fixed;
-  margin-top: 13px;
+  margin-top: 40px;
 `;
 
 const Column = styled.td`
   width: 33.33%;
-  height: 350px;
-  border: 1px solid #D7D7D7;
+  border: 1px solid #d7d7d7;
   text-align: center;
+`;
+
+const RoomTitle = styled.th`
+  position: sticky;
+  top: 0;
+  padding: 10px;
+  font-family: 'Roboto';
+  font-weight: 400;
+  font-size: 17px;
+  line-height: 20px;
+  text-align: center;
+  color: #7b7b7b;
 `;

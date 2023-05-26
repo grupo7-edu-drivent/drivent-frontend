@@ -8,18 +8,31 @@ import ActivityRooms from '../../../components/ActivityRoom';
 
 dayjs.locale('pt-br');
 
-function formatarData(data) {
-  return dayjs(data).format('dddd, DD/MM');
-}
-
 export default function Activities() {
   const [selectedButton, setSelectedButton] = useState(null);
   const [showRooms, setShowRooms] = useState(false);
 
-  const handleButtonClick = (activityId) => {
-    setSelectedButton(activityId);
+  const handleButtonClick = (date) => {
+    setSelectedButton(date);
     setShowRooms(true);
   };
+
+  const formatarData = (data) => {
+    return dayjs(data).format('dddd, DD/MM');
+  };
+
+  const uniqueDates = new Set();
+
+  activities.forEach((activity) => {
+    const formattedDate = formatarData(activity.startDate);
+    uniqueDates.add(formattedDate);
+  });
+
+  const uniqueDatesArray = Array.from(uniqueDates);
+
+  const filteredActivities = activities.filter(
+    (activity) => formatarData(activity.startDate) === selectedButton
+  );
 
   return (
     <>
@@ -27,20 +40,20 @@ export default function Activities() {
         <h1>Escolha de atividades</h1>
         {!showRooms && <h2>Primeiro, filtre pelo dia do evento:</h2>}
         <Container>
-          {activities.map((activity) => (
+          {uniqueDatesArray.map((date) => (
             <Button
-              key={activity.id}
+              key={date}
               style={{
                 margin: '0 17px 17px 0',
-                backgroundColor: selectedButton === activity.id ? '#FFD37D' : undefined,
+                backgroundColor: selectedButton === date ? '#FFD37D' : undefined,
               }}
-              onClick={() => handleButtonClick(activity.id)}
+              onClick={() => handleButtonClick(date)}
             >
-              {formatarData(activity.startDate)}
+              {date}
             </Button>
           ))}
         </Container>
-        {showRooms && <ActivityRooms activityId={selectedButton} />}
+        {showRooms && <ActivityRooms activities={filteredActivities} />}
       </Main>
     </>
   );
