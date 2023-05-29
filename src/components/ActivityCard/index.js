@@ -1,8 +1,10 @@
-import { CgEnter } from 'react-icons/cg';
+import { CgEnter, CgCheckO, CgCloseO } from 'react-icons/cg';
 import styled from 'styled-components';
+import { useState } from 'react';
 
 export default function ActivityCard({ activity }) {
   const { title, startDate, endDate, roomTitle, capacity } = activity;
+  const [select, setSelect] = useState(false);
 
   const startTime = new Date(startDate).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
   const endTime = new Date(endDate).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
@@ -16,18 +18,16 @@ export default function ActivityCard({ activity }) {
 
   return (
     <>
-      <MainContainer style={{ height: `${mainContainerHeight}px` }}>
+      <MainContainer selecionado={select} style={{ height: `${mainContainerHeight}px` }}>
         <TextContainer>
           <h3>{title}</h3>
           <h4 style={{ fontWeight: 400, marginTop: '6px' }}>
             {startTime} - {endTime}
           </h4>
         </TextContainer>
-        <IconContainer>
-          <Divider style={{ height: `${dividerHeight}px` }} />
-          <CgEnter style={{ fontSize: '20px' }} />
-          <h5 style={{ fontSize: '9px', marginTop: '5px' }}>{capacity} vagas</h5>
-        </IconContainer>
+        { capacity === 0 ? (<IconContainer><CgCloseO style={{ color: 'red' }} /><h5 style={{ fontSize: '10px', marginTop: '5px', color: 'red' }}>Inscrito</h5></IconContainer> ):(<IconContainer onClick={() => setSelect(!select)}>
+          {select ? <><CgCheckO  /><h5 style={{ fontSize: '10px', marginTop: '5px' }}>Inscrito</h5> </>: (<><Divider style={{ height: `${dividerHeight}px` }} /><CgEnter style={{ fontSize: '20px' }} /><h5 style={{ fontSize: '9px', marginTop: '5px' }}>{capacity} vagas</h5></>)}
+        </IconContainer>)}
       </MainContainer>
     </>
   );
@@ -38,7 +38,7 @@ const MainContainer = styled.div`
   flex-direction: row;
   justify-content: space-between;
   width: 275px;
-  background-color: #f1f1f1;
+  background-color: ${props => props.selecionado ? 'lightGreen' : '#f1f1f1'};
   border-radius: 5px;
   margin: 9px;
   cursor: pointer;
